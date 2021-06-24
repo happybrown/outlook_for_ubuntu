@@ -1,0 +1,28 @@
+{
+  "name": "outlook",
+  "version": "1.0.0",
+  "description": "Outlook for Ubuntu",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-installer-debian --src outlook-linux-x64/ --dest installers/ --arch amd64 --config config.json",
+    "build": "electron-packager . outlook --overwrite --platform=linux --arch=x64 --icon=app_ico.png --prune=true"
+  },
+  "keywords": [
+    "Electron",
+    "Outlook"
+  ],
+  "author": "Brown",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "asar": "^3.0.3",
+    "electron": "^18.0.3",
+    "electron-installer-debian": "^3.1.0",
+    "electron-packager": "^15.2.0"
+  },
+  "dependencies": {
+    "electron-config": "^2.0.0",
+    "electron-settings": "^4.0.2",
+    "electron-store": "^8.0.1"
+  }
+}
