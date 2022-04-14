@@ -1,11 +1,19 @@
 // Modules to control application life and create native browser window
 const {app, BrowserWindow, Menu, Tray} = require('electron')
 const path = require('path');
-const { electron } = require('process');
+const { electron, exit } = require('process');
 const Config = require('electron-store')
 const config = new Config()
 
 let win = null;
+
+// single instance lock 요청
+const singleInstanceLock = app.requestSingleInstanceLock();
+
+if (!singleInstanceLock) {
+  app.quit();
+  exit(-1);
+}
 
 function createWindow (opts) {
   // Create the browser window.
@@ -21,6 +29,10 @@ function createWindow (opts) {
 }
 
 app.whenReady().then(() => {
+  if (!singleInstanceLock) {
+    app.quit();
+    exit(-1);
+  }
   createWindow();
 
   app.on('activate', function () {
@@ -55,4 +67,17 @@ app.on('ready', () => {
 
   const ctxMenu = Menu.buildFromTemplate(template);
   tray.setContextMenu(ctxMenu);
+});
+
+app.on('second-instance', () => {
+  if (!singleInstanceLock) {
+    app.quit();
+    exit(-1);
+  }
+  if (win) {
+    if (win.isMinimized() || !win.isVisible()) {
+      win.show();
+    }
+    win.focus();
+  }
 });
